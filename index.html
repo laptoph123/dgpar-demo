@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patientenportal einbinden – dgpar</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0A4F6E;
+      --accent:  #00A89D;
+      --bg:      #F4F8FA;
+      --border:  #D6E4EB;
+      --text:    #1A2E3A;
+      --muted:   #6B8899;
+      --white:   #ffffff;
+      --code-bg: #0D2233;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header { background: var(--primary); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { color: #fff; font-size: 18px; font-weight: 600; }
+    .logo span { color: var(--accent); }
+    .header-sub { color: rgba(255,255,255,0.5); font-size: 13px; }
+
+    .progress-wrap { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; }
+    .progress-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; }
+    .prog-step { display: flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; flex: 1; position: relative; }
+    .prog-step::after { content: '›'; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); color: var(--border); font-size: 18px; }
+    .prog-step:last-child::after { display: none; }
+    .prog-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; transition: all 0.3s; }
+    .prog-step.active .prog-dot { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .prog-step.done .prog-dot { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .prog-label { font-size: 13px; font-weight: 500; color: var(--muted); transition: color 0.3s; }
+    .prog-step.active .prog-label { color: var(--primary); }
+    .prog-step.done .prog-label { color: var(--accent); }
+
+    .main { max-width: 720px; margin: 0 auto; padding: 40px 32px 80px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .step-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .step-title { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3.5vw, 32px); color: var(--primary); line-height: 1.2; margin-bottom: 14px; }
+    .step-title em { font-style: italic; }
+    .step-intro { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 580px; margin-bottom: 32px; }
+
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+    .why-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .why-icon { font-size: 26px; margin-bottom: 10px; }
+    .why-card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .why-card-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    .highlight-box { background: var(--primary); color: #fff; border-radius: 10px; padding: 20px 24px; font-size: 15px; line-height: 1.65; margin-bottom: 32px; }
+    .highlight-box strong { color: #7FD8D4; }
+
+    .cms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .cms-card { background: var(--white); border: 2px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .cms-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,168,157,0.12); }
+    .cms-card.selected { border-color: var(--primary); background: #EAF2F7; }
+    .cms-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+    .cms-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .cms-hint { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    .instr-cms-label { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 24px; cursor: pointer; }
+    .instr-cms-label:hover { border-color: var(--accent); color: var(--accent); }
+
+    .steps-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .step-row { display: flex; gap: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-body { flex: 1; }
+    .step-head { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .step-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    .snippet-tabs { display: flex; gap: 6px; margin-bottom: 0; }
+    .stab { padding: 6px 14px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--white); font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .stab:hover { border-color: var(--accent); color: var(--accent); }
+    .stab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .stab-panel { display: none; }
+    .stab-panel.active { display: block; }
+
+    .code-block { background: var(--code-bg); border-radius: 8px; overflow: hidden; margin-top: 10px; }
+    .code-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .code-lang { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+    .copy-btn { padding: 3px 11px; background: rgba(0,168,157,0.2); border: 1px solid rgba(0,168,157,0.35); border-radius: 4px; color: #7FD8D4; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+    .copy-btn:hover { background: rgba(0,168,157,0.35); }
+    .copy-btn.done { color: #fff; background: rgba(0,168,157,0.55); }
+    code.snippet { display: block; padding: 18px; font-family: 'Fira Mono', 'Consolas', monospace; font-size: 12px; line-height: 1.75; color: #A8D8E8; white-space: pre; overflow-x: auto; }
+
+    .note-box { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: var(--text); margin-top: 12px; }
+    .note-box strong { color: var(--primary); }
+
+    .text-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 10px; }
+    .text-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .text-body { font-size: 14px; line-height: 1.65; color: var(--text); margin-bottom: 12px; }
+
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #fff; border: none; border-radius: 8px; padding: 13px 26px; font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+    .btn-primary:hover { background: #083d56; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: var(--white); color: var(--primary); border: 2px solid var(--border); border-radius: 8px; padding: 11px 22px; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { border-color: var(--primary); }
+    .btn-row { display: flex; gap: 12px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+
+    @media (max-width: 580px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .cms-grid { grid-template-columns: 1fr 1fr; }
+      header { padding: 16px 20px; }
+      .main { padding: 28px 20px 60px; }
+      .progress-wrap { padding: 0 20px; }
+      .prog-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">dg<span>par</span> · Kundenportal</div>
+  <div class="header-sub">Patientenportal einbinden</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="prog-step active" id="prog-1"><div class="prog-dot">1</div><div class="prog-label">Was &amp; Warum</div></div>
+    <div class="prog-step" id="prog-2"><div class="prog-dot">2</div><div class="prog-label">Mein System</div></div>
+    <div class="prog-step" id="prog-3"><div class="prog-dot">3</div><div class="prog-label">Anleitung</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PANEL 1 -->
+  <div class="panel active" id="panel-1">
+    <div class="step-eyebrow">Schritt 1 von 3</div>
+    <div class="step-title">Weniger Aufwand.<br><em>Mehr Zeit für Ihre Patienten.</em></div>
+    <p class="step-intro">Ein einziger Link auf Ihrer Website – und Patienten finden Antworten zu ihren Rechnungen direkt bei dgpar. Ohne Anruf. Ohne Rückfrage bei Ihrer Praxis.</p>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">⏱</div><div class="why-card-title">Weniger Rückfragen</div><div class="why-card-desc">„Warum kommt die Rechnung von dgpar?" – diese Frage beantwortet das Portal für Sie.</div></div>
+      <div class="why-card"><div class="why-icon">📄</div><div class="why-card-title">Rechnungen sofort online</div><div class="why-card-desc">Patienten sehen, laden herunter und klären – rund um die Uhr, ohne Ihre Praxis einzubeziehen.</div></div>
+      <div class="why-card"><div class="why-icon">🔒</div><div class="why-card-title">Sicher &amp; DSGVO-konform</div><div class="why-card-desc">Alle Daten bleiben bei dgpar. Sie geben nur einen Link weiter – keine Patientendaten auf Ihrer Seite.</div></div>
+      <div class="why-card"><div class="why-icon">⚡</div><div class="why-card-title">In 5 Minuten erledigt</div><div class="why-card-desc">Kein Entwickler nötig. Code kopieren, einfügen, fertig. Wir zeigen Ihnen wie.</div></div>
+    </div>
+    <div class="highlight-box">Ihr stärkster Satz für Patienten:<br><strong>„Für Fragen zur Rechnung: patienten.dgpar.de – direkt, kostenlos, jederzeit."</strong></div>
+    <div class="btn-row"><button class="btn-primary" onclick="goTo(2)">Weiter: Mein System wählen →</button></div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div class="panel" id="panel-2">
+    <div class="step-eyebrow">Schritt 2 von 3</div>
+    <div class="step-title">Wie ist Ihre Website<br><em>aufgebaut?</em></div>
+    <p class="step-intro">Keine Ahnung? Fragen Sie Ihren Webmaster oder schauen Sie in die E-Mail mit den Zugangsdaten Ihrer Website.</p>
+    <div class="cms-grid">
+      <div class="cms-card" onclick="selectCms('wordpress', this)"><span class="cms-icon">🟦</span><div class="cms-name">WordPress</div><div class="cms-hint">Sehr verbreitet. Meist mit Gutenberg- oder Classic-Editor.</div></div>
+      <div class="cms-card" onclick="selectCms('typo3', this)"><span class="cms-icon">🔶</span><div class="cms-name">TYPO3</div><div class="cms-hint">Häufig in Kliniken &amp; größeren Praxen.</div></div>
+      <div class="cms-card" onclick="selectCms('wix', this)"><span class="cms-icon">⬜</span><div class="cms-name">Wix</div><div class="cms-hint">Einfacher Baukastenstil, alles per Drag &amp; Drop.</div></div>
+      <div class="cms-card" onclick="selectCms('jimdo', this)"><span class="cms-icon">🟩</span><div class="cms-name">Jimdo</div><div class="cms-hint">Deutsches Baukastensystem, sehr einfach.</div></div>
+      <div class="cms-card" onclick="selectCms('joomla', this)"><span class="cms-icon">🟧</span><div class="cms-name">Joomla</div><div class="cms-hint">Bekanntes CMS, ähnlich wie WordPress.</div></div>
+      <div class="cms-card" onclick="selectCms('eigenbau', this)"><span class="cms-icon">🛠</span><div class="cms-name">Eigenbau / Andere</div><div class="cms-hint">Entwickler hat die Seite selbst gebaut oder System unbekannt.</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(1)">← Zurück</button>
+      <button class="btn-primary" id="btn-weiter-2" onclick="goTo(3)" style="display:none">Weiter: Anleitung anzeigen →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+  <div class="panel" id="panel-3">
+    <div class="step-eyebrow">Schritt 3 von 3</div>
+    <div class="step-title">Ihre persönliche<br><em>Schritt-für-Schritt-Anleitung</em></div>
+    <div class="instr-cms-label" onclick="goTo(2)">← System ändern: <span id="cms-display">–</span></div>
+
+    <div id="instr-wordpress" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">Im WordPress-Backend anmelden</div><div class="step-text">Rufen Sie <strong>ihrepraxis.de/wp-admin</strong> auf und melden Sie sich an.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Kontakt- oder Patientenseite öffnen</div><div class="step-text">Links im Menü: <strong>Seiten</strong> → Klicken Sie auf die Seite, auf der der Hinweis erscheinen soll (z. B. „Kontakt").</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">HTML-Block einfügen</div><div class="step-text"><strong>Gutenberg (neu):</strong> Klicken Sie auf <strong>+</strong> → suchen „HTML" → „Benutzerdef. HTML" wählen.<br><strong>Classic Editor (alt):</strong> Oben auf den Reiter <strong>„Text"</strong> wechseln (nicht „Visuell").</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-head">Code einfügen &amp; speichern</div><div class="step-text">Wählen Sie unten einen Stil, kopieren Sie den Code, fügen Sie ihn ein. Dann auf <strong>„Aktualisieren"</strong> klicken.</div></div></div>
+      </div>
+    </div>
+
+    <div id="instr-typo3" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">TYPO3-Backend öffnen</div><div class="step-text">Rufen Sie <strong>ihrepraxis.de/typo3</strong> auf und melden Sie sich an.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Seite im Seitenbaum wählen</div><div class="step-text">Links im Seitenbaum auf die Seite klicken, auf der der Link erscheinen soll.</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">Neues Inhaltselement: „Reines HTML"</div><div class="step-text">Klicken Sie auf <strong>+ Inhalt hinzufügen</strong> → Reiter <strong>„Spezielle Elemente"</strong> → <strong>„Reines HTML"</strong>.</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-head">Code einfügen, speichern, Cache leeren</div><div class="step-text">Code ins HTML-Feld einfügen → Speichern → oben rechts <strong>⚡ „Alle Caches leeren"</strong>.</div></div></div>
+      </div>
+    </div>
+
+    <div id="instr-wix" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">Wix Dashboard öffnen</div><div class="step-text">Auf <strong>wix.com</strong> anmelden → <strong>„Website bearbeiten"</strong> klicken.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">HTML-Element einfügen</div><div class="step-text"><strong>+ Hinzufügen → Einbetten → HTML-Code einbetten</strong> auswählen und auf der Seite platzieren.</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">Code eingeben</div><div class="step-text">Doppelklick auf das Element → <strong>„Code eingeben"</strong> → Code einfügen → <strong>„Aktualisieren"</strong>.</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-head">Veröffentlichen</div><div class="step-text">Oben rechts auf <strong>„Veröffentlichen"</strong> klicken – fertig.</div></div></div>
+      </div>
+      <div class="note-box"><strong>Hinweis:</strong> Im Wix Free-Tarif kann das HTML-Embed eingeschränkt sein. Der einfache Text-Link funktioniert immer.</div>
+    </div>
+
+    <div id="instr-jimdo" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">Direkt auf Ihrer Seite anmelden</div><div class="step-text">Rufen Sie Ihre Website auf, melden Sie sich an und klicken Sie auf <strong>„Bearbeiten"</strong>.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">HTML-Widget hinzufügen</div><div class="step-text">Klicken Sie zwischen zwei Elementen auf <strong>+</strong> → <strong>„Weitere Inhalte"</strong> → <strong>„HTML/CSS/JavaScript"</strong>.</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">Code einfügen &amp; speichern</div><div class="step-text">Code ins Feld einfügen → auf <strong>Speichern</strong> klicken.</div></div></div>
+      </div>
+      <div class="note-box"><strong>Einfacher:</strong> Text markieren → Link-Symbol in der Toolbar → URL: <code style="background:rgba(0,0,0,0.07);padding:1px 5px;border-radius:3px">https://patienten.dgpar.de</code></div>
+    </div>
+
+    <div id="instr-joomla" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">Joomla-Backend öffnen</div><div class="step-text">Rufen Sie <strong>ihrepraxis.de/administrator</strong> auf und melden Sie sich an.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Artikel öffnen</div><div class="step-text"><strong>Inhalt → Artikel</strong> → gewünschten Artikel wählen oder neu anlegen.</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">Quellcode-Ansicht öffnen</div><div class="step-text">Im TinyMCE-Editor oben auf das <strong>&lt;&gt; Quellcode-Symbol</strong> klicken.</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-head">Code einfügen &amp; speichern</div><div class="step-text">Code einfügen → <strong>OK</strong> → <strong>„Speichern &amp; Schließen"</strong>.</div></div></div>
+      </div>
+    </div>
+
+    <div id="instr-eigenbau" class="instr-block" style="display:none">
+      <div class="steps-list">
+        <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">HTML-Datei im Editor öffnen</div><div class="step-text">Öffnen Sie die <code style="background:rgba(0,0,0,0.07);padding:1px 5px;border-radius:3px">.html</code>-Datei in einem Texteditor oder fragen Sie Ihren Entwickler.</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Code an passender Stelle einfügen</div><div class="step-text">Suchen Sie den Kontaktbereich und fügen Sie den Snippet direkt in den HTML-Quellcode ein.</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">Datei hochladen</div><div class="step-text">Speichern und per <strong>FTP/SFTP</strong> oder Hosting-Dashboard auf den Server laden.</div></div></div>
+      </div>
+      <div class="note-box"><strong>Für Ihren Entwickler:</strong> Einfach <code style="background:rgba(0,0,0,0.07);padding:1px 5px;border-radius:3px">&lt;a href="https://patienten.dgpar.de"&gt;</code> an der gewünschten Stelle einfügen.</div>
+    </div>
+
+    <!-- CODE SNIPPETS -->
+    <div style="margin-top: 28px;">
+      <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:10px;">Wählen Sie Ihren gewünschten Stil:</div>
+      <div class="snippet-tabs">
+        <button class="stab active" onclick="switchSnippet('link', this)">Text-Link</button>
+        <button class="stab" onclick="switchSnippet('button', this)">Button</button>
+        <button class="stab" onclick="switchSnippet('banner', this)">Info-Banner</button>
+        <button class="stab" onclick="switchSnippet('text', this)">Fertige Texte</button>
+      </div>
+      <div class="stab-panel active" id="snip-link">
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;a href="https://patienten.dgpar.de" target="_blank" rel="noopener"&gt;
+  Rechnungsportal: patienten.dgpar.de
+&lt;/a&gt;</code></div>
+      </div>
+      <div class="stab-panel" id="snip-button">
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML – Button</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;a href="https://patienten.dgpar.de"
+   target="_blank" rel="noopener"
+   style="display:inline-block; padding:12px 24px;
+          background:#0A4F6E; color:#fff; border-radius:6px;
+          font-weight:500; text-decoration:none; font-family:sans-serif;"&gt;
+  Rechnung online einsehen
+&lt;/a&gt;</code></div>
+      </div>
+      <div class="stab-panel" id="snip-banner">
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML – Info-Banner</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;div style="background:#F4F8FA; border-left:4px solid #00A89D;
+     padding:14px 18px; border-radius:0 8px 8px 0;
+     font-family:sans-serif; font-size:14px; color:#1A2E3A;"&gt;
+  &lt;strong style="color:#0A4F6E;"&gt;Rechnungen &amp; Abrechnung&lt;/strong&gt;&lt;br&gt;
+  Fragen zu Ihrer Arztrechnung? Direkt beim Abrechnungspartner klären:
+  &lt;a href="https://patienten.dgpar.de" target="_blank"
+     style="color:#00A89D; font-weight:600;"&gt;
+    patienten.dgpar.de
+  &lt;/a&gt;
+&lt;/div&gt;</code></div>
+      </div>
+      <div class="stab-panel" id="snip-text">
+        <div class="text-card"><div class="text-label">Kurz · Footer / Kontaktseite</div><div class="text-body">Fragen zur Rechnung? Alle Informationen finden Sie direkt unter <strong>patienten.dgpar.de</strong> – ohne Wartezeit, jederzeit.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Fragen zur Rechnung? Alle Informationen finden Sie direkt unter patienten.dgpar.de – ohne Wartezeit, jederzeit.')">Kopieren</button></div>
+        <div class="text-card"><div class="text-label">Mittel · Für-Patienten-Seite</div><div class="text-body">Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Rechnungen, Zahlungszielen oder Belegen wenden Sie sich bitte direkt an <strong>patienten.dgpar.de</strong> – schnelle Hilfe, ganz ohne Umweg über unsere Praxis.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Rechnungen, Zahlungszielen oder Belegen wenden Sie sich bitte direkt an patienten.dgpar.de – schnelle Hilfe, ganz ohne Umweg über unsere Praxis.')">Kopieren</button></div>
+        <div class="text-card"><div class="text-label">Lang · FAQ / Patienteninformation</div><div class="text-body">Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Auf <strong>patienten.dgpar.de</strong> können Sie Ihre Rechnungen jederzeit einsehen, herunterladen und bei Fragen direkt Kontakt aufnehmen – kostenlos und sicher.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Auf patienten.dgpar.de können Sie Ihre Rechnungen jederzeit einsehen, herunterladen und bei Fragen direkt Kontakt aufnehmen – kostenlos und sicher.')">Kopieren</button></div>
+      </div>
+    </div>
+
+    <div class="btn-row"><button class="btn-secondary" onclick="goTo(2)">← System ändern</button></div>
+  </div>
+
+</div>
+
+<script>
+  let selectedCms = null;
+  const cmsNames = { wordpress:'WordPress', typo3:'TYPO3', wix:'Wix', jimdo:'Jimdo', joomla:'Joomla', eigenbau:'Eigenbau / Andere' };
+
+  function goTo(step) {
+    if (step === 3 && !selectedCms) return;
+    [1,2,3].forEach(n => {
+      document.getElementById('panel-'+n).classList.toggle('active', n===step);
+      const p = document.getElementById('prog-'+n);
+      p.classList.remove('active','done');
+      if (n===step) p.classList.add('active');
+      else if (n<step) p.classList.add('done');
+    });
+    if (step === 3) {
+      document.querySelectorAll('.instr-block').forEach(b => b.style.display='none');
+      const b = document.getElementById('instr-'+selectedCms);
+      if (b) b.style.display='block';
+      document.getElementById('cms-display').textContent = cmsNames[selectedCms]||selectedCms;
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function selectCms(id, card) {
+    selectedCms = id;
+    document.querySelectorAll('.cms-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('btn-weiter-2').style.display='inline-flex';
+  }
+
+  function switchSnippet(id, btn) {
+    document.querySelectorAll('.stab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('snip-'+id).classList.add('active');
+    btn.closest('.snippet-tabs').querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-block').querySelector('code').innerText;
+    navigator.clipboard.writeText(code).then(() => { btn.textContent='✓ Kopiert'; btn.classList.add('done'); setTimeout(()=>{ btn.textContent='Kopieren'; btn.classList.remove('done'); },2000); });
+  }
+
+  function copyText(btn, text) {
+    navigator.clipboard.writeText(text).then(() => { btn.textContent='✓ Kopiert'; btn.classList.add('done'); setTimeout(()=>{ btn.textContent='Kopieren'; btn.classList.remove('done'); },2000); });
+  }
+</script>
+</body>
+</html>
