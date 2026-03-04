@@ -45,11 +45,18 @@
     .step-title em { font-style: italic; }
     .step-intro { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 580px; margin-bottom: 32px; }
 
-    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
     .why-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
     .why-icon { font-size: 26px; margin-bottom: 10px; }
     .why-card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
     .why-card-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 28px; }
+    .service-item { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; }
+    .service-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
+    .service-text { font-size: 13px; color: var(--text); line-height: 1.45; }
+    .service-text strong { display: block; font-weight: 600; margin-bottom: 1px; }
+    .service-text span { color: var(--muted); font-size: 12px; }
 
     .highlight-box { background: var(--primary); color: #fff; border-radius: 10px; padding: 20px 24px; font-size: 15px; line-height: 1.65; margin-bottom: 32px; }
     .highlight-box strong { color: #7FD8D4; }
@@ -72,7 +79,7 @@
     .step-head { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
     .step-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-    .snippet-tabs { display: flex; gap: 6px; margin-bottom: 0; }
+    .snippet-tabs { display: flex; gap: 6px; margin-bottom: 0; flex-wrap: wrap; }
     .stab { padding: 6px 14px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--white); font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
     .stab:hover { border-color: var(--accent); color: var(--accent); }
     .stab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
@@ -101,7 +108,7 @@
     .btn-row { display: flex; gap: 12px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
 
     @media (max-width: 580px) {
-      .why-grid { grid-template-columns: 1fr; }
+      .why-grid, .services-grid { grid-template-columns: 1fr; }
       .cms-grid { grid-template-columns: 1fr 1fr; }
       header { padding: 16px 20px; }
       .main { padding: 28px 20px 60px; }
@@ -130,15 +137,29 @@
   <!-- PANEL 1 -->
   <div class="panel active" id="panel-1">
     <div class="step-eyebrow">Schritt 1 von 3</div>
-    <div class="step-title">Weniger Aufwand.<br><em>Mehr Zeit für Ihre Patienten.</em></div>
-    <p class="step-intro">Ein einziger Link auf Ihrer Website – und Patienten finden Antworten zu ihren Rechnungen direkt bei dgpar. Ohne Anruf. Ohne Rückfrage bei Ihrer Praxis.</p>
+    <div class="step-title">Weniger Rückfragen.<br><em>Patienten helfen sich selbst.</em></div>
+    <p class="step-intro">Ihre Patienten haben Fragen zur Rechnung – bisher landen diese bei Ihrer Praxis. Mit einem einzigen Link auf Ihrer Website können Patienten die häufigsten Anliegen direkt und eigenständig bei dgpar klären.</p>
+
     <div class="why-grid">
-      <div class="why-card"><div class="why-icon">⏱</div><div class="why-card-title">Weniger Rückfragen</div><div class="why-card-desc">„Warum kommt die Rechnung von dgpar?" – diese Frage beantwortet das Portal für Sie.</div></div>
-      <div class="why-card"><div class="why-icon">📄</div><div class="why-card-title">Rechnungen sofort online</div><div class="why-card-desc">Patienten sehen, laden herunter und klären – rund um die Uhr, ohne Ihre Praxis einzubeziehen.</div></div>
-      <div class="why-card"><div class="why-icon">🔒</div><div class="why-card-title">Sicher &amp; DSGVO-konform</div><div class="why-card-desc">Alle Daten bleiben bei dgpar. Sie geben nur einen Link weiter – keine Patientendaten auf Ihrer Seite.</div></div>
-      <div class="why-card"><div class="why-icon">⚡</div><div class="why-card-title">In 5 Minuten erledigt</div><div class="why-card-desc">Kein Entwickler nötig. Code kopieren, einfügen, fertig. Wir zeigen Ihnen wie.</div></div>
+      <div class="why-card"><div class="why-icon">📞</div><div class="why-card-title">Weniger Anrufe & Mails</div><div class="why-card-desc">Fragen zu Rechnungen, Mahnungen oder Ratenzahlung landen direkt bei dgpar – nicht bei Ihrem Praxisteam.</div></div>
+      <div class="why-card"><div class="why-icon">🕐</div><div class="why-card-title">Rund um die Uhr erreichbar</div><div class="why-card-desc">Patienten können ihr Anliegen jederzeit einreichen – auch abends oder am Wochenende.</div></div>
+      <div class="why-card"><div class="why-icon">🔒</div><div class="why-card-title">Sicher &amp; DSGVO-konform</div><div class="why-card-desc">Alle Anfragen werden verschlüsselt übertragen. Sie geben nur einen Link weiter – keine Patientendaten auf Ihrer Seite.</div></div>
+      <div class="why-card"><div class="why-icon">⚡</div><div class="why-card-title">In 5 Minuten eingebunden</div><div class="why-card-desc">Kein Entwickler nötig. Einfach einen Textbaustein oder Link auf Ihrer Website platzieren.</div></div>
     </div>
-    <div class="highlight-box">Ihr stärkster Satz für Patienten:<br><strong>„Für Fragen zur Rechnung: patienten.dgpar.de – direkt, kostenlos, jederzeit."</strong></div>
+
+    <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:12px;">Was Ihre Patienten dort selbst erledigen können:</div>
+    <div class="services-grid">
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Rechnungskopie anfordern</strong><span>Kopie der Arztrechnung anfordern</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Rechnungsänderung beantragen</strong><span>Korrekturen oder Beanstandungen einreichen</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Ratenzahlung beantragen</strong><span>Flexible Zahlungsvereinbarung starten</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Mahnstatus prüfen</strong><span>Informationen zur Mahnung einholen</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Zahlungsfrist einsehen</strong><span>Aktuelle Fristen und Informationen</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Bearbeitungsstatus verfolgen</strong><span>Stand einer Anfrage jederzeit einsehen</span></div></div>
+      <div class="service-item"><div class="service-dot"></div><div class="service-text"><strong>Sonstige Anfragen stellen</strong><span>Für alle weiteren Anliegen</span></div></div>
+    </div>
+
+    <div class="highlight-box">Ihr stärkster Satz für Patienten:<br><strong>„Fragen zu Ihrer Rechnung? Unter patienten.dgpar.de können Sie Ihr Anliegen direkt und sicher an dgpar übermitteln – rund um die Uhr, ohne Wartezeit."</strong></div>
+
     <div class="btn-row"><button class="btn-primary" onclick="goTo(2)">Weiter: Mein System wählen →</button></div>
   </div>
 
@@ -170,7 +191,7 @@
     <div id="instr-wordpress" class="instr-block" style="display:none">
       <div class="steps-list">
         <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-head">Im WordPress-Backend anmelden</div><div class="step-text">Rufen Sie <strong>ihrepraxis.de/wp-admin</strong> auf und melden Sie sich an.</div></div></div>
-        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Kontakt- oder Patientenseite öffnen</div><div class="step-text">Links im Menü: <strong>Seiten</strong> → Klicken Sie auf die Seite, auf der der Hinweis erscheinen soll (z. B. „Kontakt").</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-head">Kontakt- oder Patientenseite öffnen</div><div class="step-text">Links im Menü: <strong>Seiten</strong> → Klicken Sie auf die Seite, auf der der Hinweis erscheinen soll (z. B. „Kontakt" oder „Für Patienten").</div></div></div>
         <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-head">HTML-Block einfügen</div><div class="step-text"><strong>Gutenberg (neu):</strong> Klicken Sie auf <strong>+</strong> → suchen „HTML" → „Benutzerdef. HTML" wählen.<br><strong>Classic Editor (alt):</strong> Oben auf den Reiter <strong>„Text"</strong> wechseln (nicht „Visuell").</div></div></div>
         <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-head">Code einfügen &amp; speichern</div><div class="step-text">Wählen Sie unten einen Stil, kopieren Sie den Code, fügen Sie ihn ein. Dann auf <strong>„Aktualisieren"</strong> klicken.</div></div></div>
       </div>
@@ -231,36 +252,54 @@
         <button class="stab" onclick="switchSnippet('banner', this)">Info-Banner</button>
         <button class="stab" onclick="switchSnippet('text', this)">Fertige Texte</button>
       </div>
+
       <div class="stab-panel active" id="snip-link">
         <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;a href="https://patienten.dgpar.de" target="_blank" rel="noopener"&gt;
-  Rechnungsportal: patienten.dgpar.de
+  Fragen zur Rechnung? Direkt zum dgpar-Patientenservice
 &lt;/a&gt;</code></div>
       </div>
+
       <div class="stab-panel" id="snip-button">
         <div class="code-block"><div class="code-header"><span class="code-lang">HTML – Button</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;a href="https://patienten.dgpar.de"
    target="_blank" rel="noopener"
    style="display:inline-block; padding:12px 24px;
           background:#0A4F6E; color:#fff; border-radius:6px;
           font-weight:500; text-decoration:none; font-family:sans-serif;"&gt;
-  Rechnung online einsehen
+  Zum Patientenservice dgpar
 &lt;/a&gt;</code></div>
       </div>
+
       <div class="stab-panel" id="snip-banner">
         <div class="code-block"><div class="code-header"><span class="code-lang">HTML – Info-Banner</span><button class="copy-btn" onclick="copyCode(this)">Kopieren</button></div><code class="snippet">&lt;div style="background:#F4F8FA; border-left:4px solid #00A89D;
      padding:14px 18px; border-radius:0 8px 8px 0;
      font-family:sans-serif; font-size:14px; color:#1A2E3A;"&gt;
-  &lt;strong style="color:#0A4F6E;"&gt;Rechnungen &amp; Abrechnung&lt;/strong&gt;&lt;br&gt;
-  Fragen zu Ihrer Arztrechnung? Direkt beim Abrechnungspartner klären:
+  &lt;strong style="color:#0A4F6E;"&gt;Fragen zu Ihrer Rechnung?&lt;/strong&gt;&lt;br&gt;
+  Rechnungskopie, Ratenzahlung, Beanstandungen und mehr –
+  erledigen Sie Ihr Anliegen direkt und sicher bei unserem
+  Abrechnungspartner dgpar:
   &lt;a href="https://patienten.dgpar.de" target="_blank"
      style="color:#00A89D; font-weight:600;"&gt;
     patienten.dgpar.de
   &lt;/a&gt;
 &lt;/div&gt;</code></div>
       </div>
+
       <div class="stab-panel" id="snip-text">
-        <div class="text-card"><div class="text-label">Kurz · Footer / Kontaktseite</div><div class="text-body">Fragen zur Rechnung? Alle Informationen finden Sie direkt unter <strong>patienten.dgpar.de</strong> – ohne Wartezeit, jederzeit.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Fragen zur Rechnung? Alle Informationen finden Sie direkt unter patienten.dgpar.de – ohne Wartezeit, jederzeit.')">Kopieren</button></div>
-        <div class="text-card"><div class="text-label">Mittel · Für-Patienten-Seite</div><div class="text-body">Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Rechnungen, Zahlungszielen oder Belegen wenden Sie sich bitte direkt an <strong>patienten.dgpar.de</strong> – schnelle Hilfe, ganz ohne Umweg über unsere Praxis.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Rechnungen, Zahlungszielen oder Belegen wenden Sie sich bitte direkt an patienten.dgpar.de – schnelle Hilfe, ganz ohne Umweg über unsere Praxis.')">Kopieren</button></div>
-        <div class="text-card"><div class="text-label">Lang · FAQ / Patienteninformation</div><div class="text-body">Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Auf <strong>patienten.dgpar.de</strong> können Sie Ihre Rechnungen jederzeit einsehen, herunterladen und bei Fragen direkt Kontakt aufnehmen – kostenlos und sicher.</div><button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Auf patienten.dgpar.de können Sie Ihre Rechnungen jederzeit einsehen, herunterladen und bei Fragen direkt Kontakt aufnehmen – kostenlos und sicher.')">Kopieren</button></div>
+        <div class="text-card">
+          <div class="text-label">Kurz · Footer / Kontaktseite</div>
+          <div class="text-body">Fragen zu Ihrer dgpar-Rechnung? Unter <strong>patienten.dgpar.de</strong> können Sie Ihr Anliegen direkt und sicher übermitteln – rund um die Uhr, ohne Wartezeit.</div>
+          <button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Fragen zu Ihrer dgpar-Rechnung? Unter patienten.dgpar.de können Sie Ihr Anliegen direkt und sicher übermitteln – rund um die Uhr, ohne Wartezeit.')">Kopieren</button>
+        </div>
+        <div class="text-card">
+          <div class="text-label">Mittel · „Für Patienten"-Seite</div>
+          <div class="text-body">Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Ihrer Rechnung – ob Rechnungskopie, Ratenzahlung, Beanstandung oder Mahnung – wenden Sie sich bitte direkt an <strong>patienten.dgpar.de</strong>. Dort können Sie Ihr Anliegen sicher und unkompliziert übermitteln, ganz ohne Umweg über unsere Praxis.</div>
+          <button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Die Abrechnung Ihrer Behandlung übernimmt unser Partner dgpar. Für Fragen zu Ihrer Rechnung – ob Rechnungskopie, Ratenzahlung, Beanstandung oder Mahnung – wenden Sie sich bitte direkt an patienten.dgpar.de. Dort können Sie Ihr Anliegen sicher und unkompliziert übermitteln, ganz ohne Umweg über unsere Praxis.')">Kopieren</button>
+        </div>
+        <div class="text-card">
+          <div class="text-label">Lang · FAQ / Patienteninformation</div>
+          <div class="text-body">Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Unter <strong>patienten.dgpar.de</strong> steht Ihnen ein sicherer Self-Service zur Verfügung: Rechnungskopien anfordern, Ratenzahlung beantragen, Beanstandungen einreichen, Mahnstatus prüfen und vieles mehr – direkt, kostenlos und rund um die Uhr.</div>
+          <button class="copy-btn" style="background:rgba(10,79,110,0.08);border-color:rgba(10,79,110,0.2);color:var(--primary);" onclick="copyText(this,'Warum erhalte ich eine Rechnung von dgpar? Unsere Praxis hat die privatärztliche Abrechnung an dgpar übertragen. dgpar ist ein zertifizierter Abrechnungsdienstleister und verwaltet Ihre Daten DSGVO-konform. Unter patienten.dgpar.de steht Ihnen ein sicherer Self-Service zur Verfügung: Rechnungskopien anfordern, Ratenzahlung beantragen, Beanstandungen einreichen, Mahnstatus prüfen und vieles mehr – direkt, kostenlos und rund um die Uhr.')">Kopieren</button>
+        </div>
       </div>
     </div>
 
