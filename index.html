@@ -19,9 +19,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    header { background: var(--primary); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
-    .logo { color: #fff; font-size: 18px; font-weight: 600; }
-    .logo span { color: var(--accent); }
+    header { background: var(--primary); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
     .header-sub { color: rgba(255,255,255,0.5); font-size: 13px; }
 
     .progress-wrap { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; }
@@ -120,7 +118,17 @@
 <body>
 
 <header>
-  <div class="logo">dg<span>par</span> · Kundenportal</div>
+  <svg xmlns="http://www.w3.org/2000/svg" height="44" viewBox="0 0 320 44" aria-label="dgpar Logo">
+    <!-- dg -->
+    <text x="0" y="34" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-style="italic" fill="rgba(255,255,255,0.55)" letter-spacing="-1">dg</text>
+    <!-- par -->
+    <text x="46" y="34" font-family="'DM Sans', Arial, sans-serif" font-size="36" font-weight="700" fill="#ffffff" letter-spacing="-1">par</text>
+    <!-- vertical separator -->
+    <line x1="126" y1="6" x2="126" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <!-- subtitle -->
+    <text x="135" y="20" font-family="'DM Sans', Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.65)">Deutsche Gesellschaft für</text>
+    <text x="135" y="34" font-family="'DM Sans', Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.65)">privatärztliche Abrechnung</text>
+  </svg>
   <div class="header-sub">Patientenportal einbinden</div>
 </header>
 
